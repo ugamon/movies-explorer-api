@@ -1,7 +1,7 @@
 {
-  "name": "express-mesto",
-  "version": "1.0.0",
-  "description": "express-mesto",
+  "name": "movies-exporer-api",
+  "version": "0.0.1",
+  "description": "movies-exporer-api",
   "main": "app.js",
   "scripts": {
     "lint": "npx eslint .",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ugamon/express-mesto.git"
+    "url": "git+https://github.com/ugamon/movies-explorer-api.git"
   },
   "author": "Yuriy Bulich",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ugamon/express-mesto/issues"
+    "url": "https://github.com/ugamon/movies-explorer-api/issues"
   },
-  "homepage": "https://github.com/ugamon/express-mesto#readme",
+  "homepage": "https://github.com/ugamon/movies-explorer-api#readme",
   "devDependencies": {
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
