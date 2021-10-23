@@ -1,3 +1,0 @@
-# Movies exporer api
-
-## Documentation
