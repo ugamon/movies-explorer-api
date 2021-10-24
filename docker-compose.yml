@@ -8,8 +8,8 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=$MONGODB_PASSWORD
     ports:
       - $MONGODB_LOCAL_PORT:$MONGODB_DOCKER_PORT
-    volumes:
-      - db:/data/db
+    # volumes:
+    #   - db:/data/db
   app:
     depends_on:
       - mongodb
@@ -26,5 +26,5 @@ services:
       - DB_PORT=$MONGODB_DOCKER_PORT
     stdin_open: true
     tty: true
-volumes:
-  db:
+# volumes:
+#   db:
