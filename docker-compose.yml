@@ -9,8 +9,6 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=$MONGODB_PASSWORD
     ports:
       - $MONGODB_LOCAL_PORT:$MONGODB_DOCKER_PORT
-    # volumes:
-    #   - db:/data/db
   app:
     depends_on:
       - mongodb
@@ -27,5 +25,10 @@ services:
       - DB_PORT=$MONGODB_DOCKER_PORT
     stdin_open: true
     tty: true
-# volumes:
-#   db:
+  nginx:
+    depends_on: app
+    image: nginx
+    ports:
+      - 80:80
+    volumes:
+      - /etc/nginx/sites-available/default:/etc/nginx/sites-available/default
