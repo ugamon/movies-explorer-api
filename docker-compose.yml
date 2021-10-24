@@ -25,11 +25,11 @@ services:
       - DB_PORT=$MONGODB_DOCKER_PORT
     stdin_open: true
     tty: true
-  nginx:
-    depends_on: 
-      - app
-    image: nginx
-    ports:
-      - 80:80
-    volumes:
-      - /etc/nginx/sites-available/default:/etc/nginx/sites-available/default
+  # nginx:
+  #   depends_on: 
+  #     - app
+  #   image: nginx
+  #   ports:
+  #     - 80:80
+  #   volumes:
+  #     - /etc/nginx/sites-available/default:/etc/nginx/sites-available/default

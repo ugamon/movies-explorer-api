@@ -35,20 +35,20 @@
     - name: Start docker engine
       command: systemctl start docker 
     
+    - name: Build and start docker-compose files
+      command: docker-compose build
+      args:
+        chdir: /home/ugamon29/movies-explorer-api
+    
     - name: Launching the docker-compose infra
       command: docker-compose up -d
       args:
         chdir: /home/ugamon29/movies-explorer-api
-    
-    - name: Enable nginx daemon
-      command: systemctl enable --now nginx
     
     - name: Nginx configuration
       copy:
         src: ./nginx/default
         dest: /etc/nginx/sites-available/default
     
-    - name: Build and start docker-compose files
-      command: docker-compose build
-      args:
-        chdir: /home/ugamon29/movies-explorer-api
+    - name: Enable nginx daemon
+      command: systemctl enable --now nginx
