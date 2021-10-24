@@ -26,7 +26,8 @@ services:
     stdin_open: true
     tty: true
   nginx:
-    depends_on: app
+    depends_on: 
+      - app
     image: nginx
     ports:
       - 80:80

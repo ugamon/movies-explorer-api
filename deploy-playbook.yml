@@ -31,7 +31,6 @@
       copy:
         src: docker-compose.yml
         dest: ~/movies-explorer-api
-
     
     - name: Start docker engine
       command: systemctl start docker 
