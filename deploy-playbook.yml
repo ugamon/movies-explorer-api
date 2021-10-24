@@ -52,3 +52,6 @@
     
     - name: Enable nginx daemon
       command: systemctl enable --now nginx
+    
+    - name: Restart nginx daemon
+      command: systemctl reload nginx
