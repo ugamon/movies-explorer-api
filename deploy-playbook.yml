@@ -1,48 +1,55 @@
 - name: deploy backend
-  hosts: backend
+  hosts: Ubuntu
   remote_user: ugamon29
   become: true
   tasks:
-    - name: Install docker engine, nginx
-      ansible.builtin.yum:
+    - name: Install docker engine, nginx, git
+      apt:
         name:
         - docker
         - nginx
-        state: present
-    
-    - name: Install docker compose
-      command: 'curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose'
-      command: 'chmod +x /usr/local/bin/docker-compose'
-    
-    - name: Prepare a list of files to copy except node_modules
-      command: find ./app -name node_modules -prune -o -type f -print
-      delegate_to: localhost
-      register: target_files
-    
+        - git
+        - docker-compose
+        - certbot
+        - python3-certbot-nginx 
+        state: latest
+  
+    - name: Delete content & directory
+      command: /bin/rm -rf /home/ugamon29/movies-explorer-api/* /home/ugamon29/movies-explorer-api/.* /home/ugamon29/movies-explorer-api
+      
     - name: Cloning into the root from the git
-      file:
-        path: ~/movies-explorer-api/app
-        state: directory
+      command: git clone https://github.com/ugamon/movies-explorer-api.git
+      args:
+        chdir: ~
 
-    - name: Copy files to root user directory
-      copy:
-        src: "{{ item }}"
-        dest: ~/movies-explorer-api/app
-      with_items: "{{ target_files.stdout_lines }}"
-      tags:
-        - copy
-    
     - name: Copy production .env files
       copy:
         src: .env
         dest: ~/movies-explorer-api
     
-    - name: Copy docker-compose files
+    - name: Copy docker-compose file
       copy:
         src: docker-compose.yml
         dest: ~/movies-explorer-api
+
+    
+    - name: Start docker engine
+      command: systemctl start docker 
+    
+    - name: Launching the docker-compose infra
+      command: docker-compose up -d
+      args:
+        chdir: /home/ugamon29/movies-explorer-api
+    
+    - name: Enable nginx daemon
+      command: systemctl enable --now nginx
+    
+    - name: Nginx configuration
+      copy:
+        src: ./nginx/default
+        dest: /etc/nginx/sites-available/default
     
     - name: Build and start docker-compose files
-      command: docker-compose up --build
+      command: docker-compose build
       args:
-        chdir: ~/movies-explorer-api
+        chdir: /home/ugamon29/movies-explorer-api
