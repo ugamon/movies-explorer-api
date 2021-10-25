@@ -27,4 +27,4 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Run unit-tests
-        run: cd app & npm run test
+        run: ls -l & npm run test
