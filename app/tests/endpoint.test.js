@@ -9,7 +9,7 @@ const request = supertest(app);
 // подготовка тестовых данных
 let token = '';
 const userTextFixture = {
-  name: 'test', email: 'test@test.test', password: 'test', newname: 'newtest',
+  name: 'test', email: 'unittest@unittest.test', password: 'test', newname: 'newtest',
 };
 const movieTextFixture = {
   country: 'test',
@@ -22,7 +22,7 @@ const movieTextFixture = {
   thumbnail: 'http://test.com',
   nameRU: 'test',
   nameEN: 'test',
-  // movieId: '507f191e810c19729de860ea',
+  movieId: 1,
 };
 
 afterAll(() => {
@@ -134,8 +134,8 @@ describe('--- Эндпоинты фильмов ---', () => {
       .set('Authorization', `Bearer ${token}`)
       .send(movieTextFixture)
       .then(({ body }) => {
-        filmId = body.movieId;
-        const { movieId, ...rest } = body;
+        filmId = body._id;
+        const { _id, ...rest } = body;
         expect(rest).toStrictEqual(movieTextFixture);
       });
     return req;
@@ -175,7 +175,7 @@ describe('--- Эндпоинты фильмов ---', () => {
     const req = request.get('/movies')
       .set('Authorization', `Bearer ${token}`)
       .then(({ body }) => {
-        expect(body[0].movieId).toBe(filmId);
+        expect(body[0]._id).toBe(filmId);
       });
     return req;
   });
@@ -193,7 +193,7 @@ describe('--- Эндпоинты фильмов ---', () => {
     const req = request.delete(`/movies/${filmId}`)
       .set('Authorization', `Bearer ${token}`)
       .then((response) => {
-        expect(response.status).toBe(400);
+        expect(response.status).toBe(404);
       });
     return req;
   });

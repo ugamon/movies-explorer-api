@@ -10,8 +10,8 @@ module.exports.getAllFilms = (req, res, next) => {
     .find({ owner: req.user._id })
     .then((moviesList) => {
       const newArray = moviesList.map(({ _doc }) => {
-        const { _id, ...rest } = _doc;
-        return { movieId: _id, ...rest };
+        const { ...rest } = _doc;
+        return { ...rest };
       });
 
       dataFormatter(res, newArray);
@@ -24,8 +24,8 @@ module.exports.createFilm = (req, res, next) => {
 
   Movie.create({ owner: req.user._id, ...data })
     .then(({ _doc }) => {
-      const { _id, owner, ...moviedata } = _doc;
-      dataFormatter(res, { movieId: _id, ...moviedata });
+      const { owner, ...moviedata } = _doc;
+      dataFormatter(res, { ...moviedata });
     })
     .catch(next);
 };

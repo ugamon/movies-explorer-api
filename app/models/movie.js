@@ -40,10 +40,10 @@ const movieScheme = new Schema({
     type: mongoose.Types.ObjectId,
     required: true,
   },
-  // movieId: {
-  //   type: mongoose.Types.ObjectId,
-  //   required: true,
-  // },
+  movieId: {
+    type: Number,
+    required: true,
+  },
   nameRU: {
     type: String,
     required: true,

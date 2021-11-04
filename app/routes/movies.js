@@ -15,9 +15,9 @@ moviesRouter.post('/', celebrate({
     image: Joi.string().required().custom(isUrl),
     trailer: Joi.string().required().custom(isUrl),
     thumbnail: Joi.string().required().custom(isUrl),
-    // owner: Joi.string().required().alphanum(24),
     nameRU: Joi.string().required().min(2).max(30),
     nameEN: Joi.string().required().min(2).max(30),
+    movieId: Joi.number().required().precision(0),
   }),
 }), createFilm);
 
