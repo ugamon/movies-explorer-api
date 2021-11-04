@@ -1,7 +1,8 @@
 - name: deploy backend
   hosts: Ubuntu
   remote_user: ugamon29
-  become: true
+  become_user: ugamon29
+  become: yes
   tasks:
     - name: Install docker engine, nginx, git
       apt:
@@ -15,43 +16,48 @@
         state: latest
   
     - name: Delete content & directory
-      command: /bin/rm -rf /home/ugamon29/movies-explorer-api/* /home/ugamon29/movies-explorer-api/.* /home/ugamon29/movies-explorer-api
+      command: /bin/rm -rf /home/ugamon29/apps/movies-explorer-api/* /home/ugamon29/apps/movies-explorer-api/.* /home/ugamon29/apps/movies-explorer-api /home/ugamon29/apps
       
     - name: Cloning into the root from the git
-      command: git clone https://github.com/ugamon/movies-explorer-api.git
-      args:
-        chdir: ~
-
+      ansible.builtin.git: 
+        repo: 'https://github.com/ugamon/movies-explorer-api.git'
+        dest: /home/ugamon29/apps
+        version: level-1
+      
     - name: Copy production .env files
       copy:
         src: .env
-        dest: ~/movies-explorer-api
+        dest: ~/apps/.env
+      
     
-    - name: Copy docker-compose file
-      copy:
-        src: docker-compose.yml
-        dest: ~/movies-explorer-api
+    # - name: Copy docker-compose file
+    #   copy:
+    #     src: docker-compose.yml
+    #     dest: ~/apps/docker-compose.yml
     
     - name: Start docker engine
-      command: systemctl start docker 
+      command: systemctl start docker  
+      become_user: root
     
     - name: Build and start docker-compose files
-      command: docker-compose build
+      command: sudo docker-compose build
       args:
-        chdir: /home/ugamon29/movies-explorer-api
-    
+        chdir: /home/ugamon29/apps
+     
+
     - name: Launching the docker-compose infra
-      command: docker-compose up -d
+      command: sudo docker-compose up -d
       args:
-        chdir: /home/ugamon29/movies-explorer-api
-    
+        chdir: /home/ugamon29/apps
+
     - name: Nginx configuration
       copy:
         src: ./nginx/default
         dest: /etc/nginx/sites-available/default
-    
+      become_user: root
+
     - name: Enable nginx daemon
-      command: systemctl enable --now nginx
-    
+      command: sudo systemctl enable --now nginx
+
     - name: Restart nginx daemon
-      command: systemctl reload nginx
+      command: sudo systemctl reload nginx

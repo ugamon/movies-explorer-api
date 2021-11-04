@@ -32,7 +32,7 @@ module.exports.createFilm = (req, res, next) => {
 
 module.exports.deleteFilm = (req, res, next) => {
   //  todo: in the next sprint need to check the owner id
-  if (!mongoose.Types.ObjectId.isValid(req.params.cardId)) {
+  if (!mongoose.Types.ObjectId.isValid(req.params.movieId)) {
     throw new InvalidDataError();
   }
   Movie
