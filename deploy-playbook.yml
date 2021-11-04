@@ -39,12 +39,17 @@
       command: systemctl start docker  
       become_user: root
     
-    - name: Build and start docker-compose files
+    - name: Stopping the current docker-compose
+      command: sudo docker-compose down
+      args:
+        chdir: /home/ugamon29/apps
+      ignore_errors: True
+    
+    - name: Build  docker-compose files
       command: sudo docker-compose build
       args:
         chdir: /home/ugamon29/apps
-     
-
+    
     - name: Launching the docker-compose infra
       command: sudo docker-compose up -d
       args:
