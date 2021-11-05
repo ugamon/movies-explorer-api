@@ -66,6 +66,12 @@ module.exports.currentUser = (req, res, next) => {
 module.exports.changeProfile = (req, res, next) => {
   const { name, email } = req.body;
   User
+    .findOne({ email })
+    .then(() => {
+      throw new DuplicateError();
+    })
+    .catch(next);
+  User
     .findByIdAndUpdate(
       req.user._id,
       { name, email },

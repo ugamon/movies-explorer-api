@@ -9,7 +9,10 @@ const request = supertest(app);
 // подготовка тестовых данных
 let token = '';
 const userTextFixture = {
-  name: 'test', email: 'unittest@unittest.test', password: 'test', newname: 'newtest',
+  name: 'test', email: 'unittest@unittest.test', password: 'test', newname: 'newtest', newEmail: 'newunittest@unittest.test',
+};
+const wrongUserFixture = {
+  name: 'test2', email: 'unittest2@unittest.test', password: 'test2', newname: 'newtest2',
 };
 const movieTextFixture = {
   country: 'test',
@@ -127,6 +130,36 @@ describe('--- Эндпоинты пользователя ---', () => {
       });
     return req;
   });
+
+  it('При обновлении данных пользователя с использованием почтового ящика, который принадлежит другому юзеру, необходимо возвращать ошибку 409', () => {
+    const req = request.patch('/users/me')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: userTextFixture.newname, email: wrongUserFixture.email })
+      .then((response) => {
+        expect(response.status).toBe(409);
+      });
+    return req;
+  });
+
+  it('Обновление имени пользователя без передачи нового имени завершается должна возвращаться ошибка 400', () => {
+    const req = request.patch('/users/me')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ email: userTextFixture.newEmail })
+      .then((response) => {
+        expect(response.status).toBe(400);
+      });
+    return req;
+  });
+
+  it('Обновление почтового ящика без передачи нового почтового ящика должна возвращаться ошибка 400', () => {
+    const req = request.patch('/users/me')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: userTextFixture.name })
+      .then((response) => {
+        expect(response.status).toBe(400);
+      });
+    return req;
+  });
 });
 
 describe('--- Эндпоинты фильмов ---', () => {
@@ -202,6 +235,24 @@ describe('--- Эндпоинты фильмов ---', () => {
       .set('Authorization', `Bearer ${token}`)
       .then((response) => {
         expect(response.status).toBe(404);
+      });
+    return req;
+  });
+
+  it('Удаление фильма с невалидным id test4583q0d2574b5862test должно быть 400', () => {
+    const req = request.delete('/movies/test4583q0d2574b5862test')
+      .set('Authorization', `Bearer ${token}`)
+      .then((response) => {
+        expect(response.status).toBe(400);
+      });
+    return req;
+  });
+
+  it('Удаление фильма с невалидным id abc должно быть 400', () => {
+    const req = request.delete('/movies/abc')
+      .set('Authorization', `Bearer ${token}`)
+      .then((response) => {
+        expect(response.status).toBe(400);
       });
     return req;
   });
