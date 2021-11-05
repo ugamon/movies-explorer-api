@@ -37,10 +37,18 @@ describe('--- Эндпоинты пользователя ---', () => {
   });
 
   it('[positive] Healthcheck', () => {
-    const req = request.get('/')
+    const req = request.get('/healthcheck')
       .then((response) => {
         expect(response.status).toBe(200);
         expect(response.body).toStrictEqual({ message: 'OK!' });
+      });
+    return req;
+  });
+
+  it('[positive] Not found', () => {
+    const req = request.get('/dummy')
+      .then((response) => {
+        expect(response.status).toBe(404);
       });
     return req;
   });
