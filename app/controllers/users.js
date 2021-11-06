@@ -29,7 +29,8 @@ module.exports.login = (req, res, next) => {
             { expiresIn: '7d' }, // токен будет просрочен через 7дней после создания
           );
           res.send({ token });
-        });
+        })
+        .catch(next);
     })
     .catch(next);
 };

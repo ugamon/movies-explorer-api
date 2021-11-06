@@ -49,7 +49,8 @@ module.exports.deleteFilm = (req, res, next) => {
       }
       Movie
         .findByIdAndRemove({ _id: req.params.movieId })
-        .then((movieData) => dataFormatter(res, movieData));
+        .then((movieData) => dataFormatter(res, movieData))
+        .catch(next);
     })
     .catch(next);
 };
